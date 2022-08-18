@@ -13,30 +13,35 @@ def get_soup():
     return soup
 
 
-result_list = {'href': [], 'title': [], 'cost': [], 'about': [], 'category': []}
-
-
-def get_item():
-    first_div_dl = get_soup().find('div', class_='dl')
+class Results:
+    soup = get_soup()
+    first_div_dl = soup.find('div', class_='dl')
     all_first_href_a = first_div_dl.find_all('a')
-    second_div_dl = get_soup().find('div', class_='dl').find_next('div', class_='dl')
+    second_div_dl = soup.find('div', class_='dl').find_next('div', class_='dl')
     all_second_href_a = second_div_dl.find_all('a')
     all_second_href_a = all_second_href_a[:-7]
     all_href_a = all_first_href_a + all_second_href_a
 
-    for item in all_href_a:
-        result_list['href'].append('https://www.list.am/ru' + item.get('href'))
-        result_list['title'].append(item.find_next('div').find('div').get_text())
-        if item.find_next('div', class_='p') is not None:
-            result_list['cost'].append(item.find_next('div', class_='p').get_text())
-        else:
-            result_list['cost'].append('')
-        if item.find_next('div', class_='at') is not None:
-            result_list['about'].append(item.find_next('div', class_='at').get_text())
-        else:
-            result_list['about'].append('')
-        result_list['category'].append(item.find_next('div', class_='c').get_text())
-    return result_list
+    def __init__(self, href, title, cost, about, category):
+        self.href = href
+        self.title = title
+        self.cost = cost
+        self.about = about
+        self.category = category
 
+    def get_data(self):
 
-print(get_item())
+        for item in self.all_href_a:
+            self.href = 'https://www.list.am/ru' + item.get('href')
+            self.title = item.find_next('div').find('div').get_text()
+            if item.find_next('div', class_='p') is not None:
+                self.cost = item.find_next('div', class_='p').get_text()
+            else:
+                self.cost = "''"
+            if item.find_next('div', class_='at') is not None:
+                self.about = item.find_next('div', class_='at').get_text()
+            else:
+                self.about = "''"
+            self.category = item.find_next('div', class_='c').get_text()
+            print(self.href, self.title, self.cost, self.about, self.category)
+
