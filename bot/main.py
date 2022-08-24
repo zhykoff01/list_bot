@@ -1,6 +1,6 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types
-from connect import SqlRepository
+from db.repository import SqlRepository
 
 sqlRepository = SqlRepository()
 

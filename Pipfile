@@ -6,12 +6,12 @@ name = "pypi"
 [packages]
 flake8 = "*"
 asyncio = "*"
-aiogram = "*"
 psycopg2-binary = "*"
 requests = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 fake-useragent = "*"
+aiogram = "*"
 
 [dev-packages]
 
