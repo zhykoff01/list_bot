@@ -51,28 +51,35 @@ class SqlRepository:
     def is_ads_exist(self, ads: AdsResult):
         cur = self.conn.cursor()
         try:
-            cur.execute('''SELECT * FROM ads WHERE ads_id = %s''', [str(ads.ads_id)])
+            cur.execute('''SELECT ads_id FROM ads WHERE ads_id = %s''', [str(ads.ads_id)])
             some_response = cur.fetchone()
-            return len(some_response) > 0
+            if some_response is not None:
+                return len(some_response) > 0
+            else:
+                return False
         except (Exception, psycopg2.DatabaseError) as error:
             return error
         finally:
             cur.close()
 
     def save_ads(self, ads: AdsResult):
-        # bitch! save ads
-        # if not self.is_ads_exist(ads):
+        count_skipping = 0
+        count_inserting = 0
+        if not self.is_ads_exist(ads):
             cur = self.conn.cursor()
             try:
-                cur.execute('''INSERT INTO ads (ads_id, href, title, cost, about, category) values (%s, %s, %s, %s, %s, 
-                %s)''', [str(ads.ads_id), str(ads.href), str(ads.title), str(ads.cost), str(ads.about), str(ads.category)])
+                cur.execute('''INSERT INTO ads (ads_id, link, title, currency, price, rental_period, about, category)
+                 values (%s, %s, %s, %s, %s, %s, %s, %s)''',
+                            [str(ads.ads_id), str(ads.link), str(ads.title), str(ads.currency), str(ads.price),
+                             str(ads.rental_period), str(ads.about), str(ads.category)])
                 self.conn.commit()
-                print("Inserting", str(ads.ads_id), str(ads.href), str(ads.title), str(ads.cost), str(ads.about), str(ads.category),
+                print("Inserting", str(ads.ads_id), str(ads.link), str(ads.title), str(ads.currency), str(ads.price),
+                      str(ads.rental_period), str(ads.about), str(ads.category),
                       sep=" ")
             except (Exception, psycopg2.DatabaseError) as error:
                 print(error)
                 self.conn.rollback()
             finally:
                 cur.close()
-        # else:
-        #     print("Skipping ", ads.ads_id)
+        else:
+            print("Skipping ", ads.ads_id)

@@ -3,9 +3,11 @@ drop table ads;
 CREATE TABLE IF NOT EXISTS ads (
    id SERIAL PRIMARY KEY,
    ads_id VARCHAR UNIQUE NOT NULL,
-   href VARCHAR,
+   link VARCHAR,
    title VARCHAR,
-   cost VARCHAR,
+   currency VARCHAR,
+   price VARCHAR,
+   rental_period VARCHAR,
    about VARCHAR,
    category VARCHAR
 );
