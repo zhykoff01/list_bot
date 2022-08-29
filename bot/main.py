@@ -1,6 +1,6 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types
-from connect import SqlRepository
+from db.repository import SqlRepository
 
 sqlRepository = SqlRepository()
 
@@ -22,6 +22,5 @@ async def main():
         await disp.start_polling()
     finally:
         await bot.close()
-
 
 asyncio.run(main())
